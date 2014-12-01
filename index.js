@@ -184,7 +184,7 @@ ForkDB.prototype._replicate = function (opts, cb) {
         catch (err) { return ex.destroy() }
         other.id = p[0];
         other.mode = p[1];
-        self._getSeen(id, function (err, seq) {
+        self._getSeen(other.id, function (err, seq) {
             if (err) return cb(err)
             else ex.since(seq)
         });

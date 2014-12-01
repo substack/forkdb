@@ -141,8 +141,8 @@ test('since replicate sequence', function (t) {
         t.ifError(err);
     });
     ra.on('available', t.fail.bind(t));
-    ra.on('since', function (meta) {
-        if (meta.seq) t.equal(meta.seq, 3, 'since A');
+    ra.on('since', function (seq) {
+        t.equal(seq, 3, 'since A');
     });
     ra.on('response', t.fail.bind(t));
     var rb = fdb.b.replicate({ mode: 'sync' }, function (err, hs) {
@@ -151,8 +151,8 @@ test('since replicate sequence', function (t) {
     rb.on('available', function (hs) {
         t.deepEqual(hs, [ hashes[4] ], 'available B');
     });
-    rb.on('since', function (meta) {
-        if (meta.seq) t.equal(meta.seq, 3, 'since B');
+    rb.on('since', function (seq) {
+        t.equal(seq, 3, 'since B');
     });
     rb.on('response', function (hash) {
         t.deepEqual(hash, hashes[4]);
