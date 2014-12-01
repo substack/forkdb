@@ -77,21 +77,18 @@ else if (cmd === 'get') {
     });
 }
 else if (cmd === 'heads') {
-    var s = fdb.heads(argv._[1]);
-    s.pipe(through.obj(function (row, enc, next) {
-        this.push(row.hash + '\n');
-        next();
-    })).pipe(process.stdout);
+    var s = fdb.heads(argv._[1]).pipe(hashes());
+    s.pipe(process.stdout);
     s.on('end', function () { db.close() });
 }
 else if (cmd === 'tails') {
-    var s = fdb.tails(argv._[1]).pipe(ndjson());
+    var s = fdb.tails(argv._[1]).pipe(hashes());
     s.pipe(process.stdout);
     s.on('end', function () { db.close() });
 }
 else if (cmd === 'links') {
     if (argv._.length < 2) return showHelp(1);
-    var s = fdb.getLinks(argv._[1]).pipe(ndjson());
+    var s = fdb.links(argv._[1]).pipe(ndjson());
     s.pipe(process.stdout);
     s.on('end', function () { db.close() });
 }
@@ -133,6 +130,13 @@ function error (err) {
 function ndjson () {
     return through.obj(function (row, enc, next) {
         this.push(stringify(row) + '\n');
+        next();
+    });
+}
+
+function hashes () {
+    return through.obj(function (row, enc, next) {
+        this.push(row.hash + '\n');
         next();
     });
 }
