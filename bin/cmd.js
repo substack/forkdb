@@ -77,8 +77,11 @@ else if (cmd === 'get') {
     });
 }
 else if (cmd === 'heads') {
-    var s = fdb.heads(argv._[1]).pipe(ndjson());
-    s.pipe(process.stdout);
+    var s = fdb.heads(argv._[1]);
+    s.pipe(through.obj(function (row, enc, next) {
+        this.push(row.hash + '\n');
+        next();
+    })).pipe(process.stdout);
     s.on('end', function () { db.close() });
 }
 else if (cmd === 'tails') {
