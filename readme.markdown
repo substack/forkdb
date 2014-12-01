@@ -30,7 +30,7 @@ This document is now the singular head of the blorp key:
 
 ```
 $ forkdb heads blorp
-{"hash":"9c0564511643d3bc841d769e27b1f4e669a75695f2a2f6206bca967f298390a0"}
+9c0564511643d3bc841d769e27b1f4e669a75695f2a2f6206bca967f298390a0
 ```
 
 But now, we'll make a new document that links back to the document we just
@@ -44,7 +44,7 @@ f5ff29843ef0658e2a1e14ed31198807ce8302936116545928756844be45fe41
 
 ```
 $ forkdb heads blorp
-{"hash":"f5ff29843ef0658e2a1e14ed31198807ce8302936116545928756844be45fe41"}
+f5ff29843ef0658e2a1e14ed31198807ce8302936116545928756844be45fe41
 ```
 
 But suppose that while we were making our `BEEP BOOP` update, somebody else was
@@ -62,8 +62,8 @@ which is completely fine:
 
 ```
 $ forkdb heads blorp
-{"hash":"6c0c881fad7adb3fec52b75ab0de8670391ceb8847c8e4c3a2dce9a56244b328"}
-{"hash":"f5ff29843ef0658e2a1e14ed31198807ce8302936116545928756844be45fe41"}
+6c0c881fad7adb3fec52b75ab0de8670391ceb8847c8e4c3a2dce9a56244b328
+f5ff29843ef0658e2a1e14ed31198807ce8302936116545928756844be45fe41
 ```
 
 A UI could show both (or more!) versions side by side or perhaps have a
@@ -83,7 +83,7 @@ and now we're back to a single head:
 
 ```
 $ forkdb heads blorp
-{"hash":"058647fc544f70a96d5d083ae7e3c373b441fc3d55b993407254fcce3c732f1e"}
+058647fc544f70a96d5d083ae7e3c373b441fc3d55b993407254fcce3c732f1e
 ```
 
 However, all of the previous states of the blorp key were saved into the
@@ -140,11 +140,11 @@ No matter how you get the data to each database, everything is now in sync!
 
 ```
 $ forkdb -d /tmp/a heads msg
-{"hash":"071f8d4403f88ca431023ec12a277b28bcd68ab41c5043a5bf7e690b23ba7184"}
-{"hash":"e708cc6e5114ac184e0cf81aca203ddd6b02a599d9d85ac756b37b9b19cd4fae"}
+071f8d4403f88ca431023ec12a277b28bcd68ab41c5043a5bf7e690b23ba7184
+e708cc6e5114ac184e0cf81aca203ddd6b02a599d9d85ac756b37b9b19cd4fae
 $ forkdb -d /tmp/b heads msg
-{"hash":"071f8d4403f88ca431023ec12a277b28bcd68ab41c5043a5bf7e690b23ba7184"}
-{"hash":"e708cc6e5114ac184e0cf81aca203ddd6b02a599d9d85ac756b37b9b19cd4fae"}
+071f8d4403f88ca431023ec12a277b28bcd68ab41c5043a5bf7e690b23ba7184
+e708cc6e5114ac184e0cf81aca203ddd6b02a599d9d85ac756b37b9b19cd4fae
 ```
 
 If we make a merge update on `/tmp/b`:
@@ -166,9 +166,9 @@ now the data is merged on both databases:
 
 ```
 $ forkdb -d /tmp/a heads msg
-{"hash":"7e38e3a49db243c39b86e8b17535745b8967b914b5aeaf442c8fac9f3e6a7b8b"}
+7e38e3a49db243c39b86e8b17535745b8967b914b5aeaf442c8fac9f3e6a7b8b
 $ forkdb -d /tmp/b heads msg
-{"hash":"7e38e3a49db243c39b86e8b17535745b8967b914b5aeaf442c8fac9f3e6a7b8b"}
+7e38e3a49db243c39b86e8b17535745b8967b914b5aeaf442c8fac9f3e6a7b8b
 ```
 
 Replication woo.
@@ -386,11 +386,11 @@ forkdb get HASH
 
 forkdb heads KEY
 
-  Print newline-delimited json of metadata to stdout for every head of KEY.
+  Print the hash of every head for KEY on its own line.
 
 forkdb tails KEY
 
-  Print newline-delimited json of metadata to stdout for every tail of KEY.
+  Print the hash of every tail for KEY on its own line.
 
 forkdb links HASH
 

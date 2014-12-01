@@ -30,11 +30,11 @@ forkdb get HASH
 
 forkdb heads KEY
 
-  Print newline-delimited json of metadata to stdout for every head of KEY.
+  Print the hash of every head for KEY on its own line.
 
 forkdb tails KEY
 
-  Print newline-delimited json of metadata to stdout for every tail of KEY.
+  Print the hash of every tail for KEY on its own line.
 
 forkdb links HASH
 
