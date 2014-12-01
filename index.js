@@ -160,8 +160,7 @@ ForkDB.prototype._replicate = function (opts, cb) {
     var errors = [], exchanged = [];
     var pending = 1;
     
-    var eopts = { id: self._id };
-    var ex = exchange(eopts, function (hash, fn) {
+    var ex = exchange(function (hash, fn) {
         if (mode === 'pull') {
             if (pending === 0) done();
             return;
@@ -173,25 +172,25 @@ ForkDB.prototype._replicate = function (opts, cb) {
             var r = self.store.createReadStream({ key: hash });
             r.on('error', cb);
             r.on('end', function () { if (-- pending === 0) done() });
-            fn(null, r, { seq: seq });
+            fn(null, r, seq);
         });
     });
+    ex.id(self._id);
     
     var otherId;
-    ex.on('handshake', function (id, meta) {
+    ex.on('id', function (id) {
         pending --;
         otherId = id;
         self._getSeen(id, function (err, seq) {
             if (err) return cb(err)
-            else ex.since({ seq: seq })
+            else ex.since(seq)
         });
     });
-    
-    ex.on('since', function (meta) {
-        if (meta.seq) provideSeq(meta.seq);
-        else if (meta.seen) {
-            self._addSeen(otherId, meta.seen, function () {});
-        }
+    ex.on('since', function (seq) {
+        provideSeq(seq);
+    });
+    ex.on('seen', function (seq) {
+        self._addSeen(otherId, seq, function () {});
     });
     
     function provideSeq (seq) {
@@ -227,11 +226,11 @@ ForkDB.prototype._replicate = function (opts, cb) {
         });
     });
     
-    ex.on('response', function (hash, stream, meta) {
+    ex.on('response', function (hash, stream, seq) {
         var opts = {
             expected: hash, // TODO: verify hash
             prebatch: function (rows, key, fn) {
-                self._addSeen(otherId, meta.seq || 0, function (err, rows_) {
+                self._addSeen(otherId, seq, function (err, rows_) {
                     if (err) fn(null, rows)
                     else fn(null, rows.concat(rows_))
                 });
@@ -245,10 +244,10 @@ ForkDB.prototype._replicate = function (opts, cb) {
                 }
                 else {
                     exchanged.push(hash)
-                    self._addSeen(otherId, meta.seq, function (err) {
+                    self._addSeen(otherId, seq, function (err) {
                         if (err) cb(err)
                         else if (-- pending === 0) done()
-                        ex.since({ seen: meta.seq });
+                        ex.seen(seq);
                     });
                 }
             }));
