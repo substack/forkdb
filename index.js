@@ -175,12 +175,15 @@ ForkDB.prototype._replicate = function (opts, cb) {
             fn(null, r, seq);
         });
     });
-    ex.id(self._id);
+    ex.id(JSON.stringify([ self._id, mode ]));
     
-    var otherId;
+    var other = {};
     ex.on('id', function (id) {
         pending --;
-        otherId = id;
+        try { var p = JSON.parse(id) }
+        catch (err) { return ex.destroy() }
+        other.id = p[0];
+        other.mode = p[1];
         self._getSeen(id, function (err, seq) {
             if (err) return cb(err)
             else ex.since(seq)
@@ -190,7 +193,7 @@ ForkDB.prototype._replicate = function (opts, cb) {
         provideSeq(seq);
     });
     ex.on('seen', function (seq) {
-        self._addSeen(otherId, seq, function () {});
+        self._addSeen(other.id, seq, function () {});
     });
     
     function provideSeq (seq) {
@@ -215,6 +218,8 @@ ForkDB.prototype._replicate = function (opts, cb) {
         if (mode === 'push') return;
         var p = hashes.length;
         var needed = [];
+        if (mode === 'sync' && other.mode === 'pull') return;
+        
         hashes.forEach(function (h) {
             self.get(h, function (err) {
                 if (err) needed.push(h);
@@ -230,7 +235,7 @@ ForkDB.prototype._replicate = function (opts, cb) {
         var opts = {
             expected: hash, // TODO: verify hash
             prebatch: function (rows, key, fn) {
-                self._addSeen(otherId, seq, function (err, rows_) {
+                self._addSeen(other.id, seq, function (err, rows_) {
                     if (err) fn(null, rows)
                     else fn(null, rows.concat(rows_))
                 });
@@ -244,7 +249,7 @@ ForkDB.prototype._replicate = function (opts, cb) {
                 }
                 else {
                     exchanged.push(hash)
-                    self._addSeen(otherId, seq, function (err) {
+                    self._addSeen(other.id, seq, function (err) {
                         if (err) cb(err)
                         else if (-- pending === 0) done()
                         ex.seen(seq);

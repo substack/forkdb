@@ -11,7 +11,7 @@
     "defined": "~0.0.0",
     "fwdb": "^1.2.0",
     "has": "~0.0.1",
-    "hash-exchange": "^2.0.0",
+    "hash-exchange": "^4.0.0",
     "inherits": "^2.0.1",
     "isarray": "~0.0.1",
     "json-stable-stringify": "^1.0.0",
