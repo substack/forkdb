@@ -6,6 +6,7 @@ var defined = require('defined');
 
 var argv = require('subarg')(process.argv.slice(2), {
     alias: { d: 'dir', h: 'help' },
+    boolean: [ 'live' ],
     default: { dir: defined(process.env.FORKDB_DIR, './forkdb') }
 });
 if (argv.help || argv._[0] === 'help') return showHelp(0);
@@ -101,13 +102,16 @@ else if (cmd === 'future') {
     showFuture(fdb, argv._[1], function () { db.close() });
 }
 else if (cmd === 'sync' || cmd === 'pull' || cmd === 'push') {
-    var rep = fdb.replicate({ mode: cmd }, function (errors, hashes) {
+    var opts = { mode: cmd, live: argv.live };
+    var rep = fdb.replicate(opts, function (errors, hashes) {
         if (errors) {
             errors.forEach(function (err) { console.error(err) });
         }
-        db.close();
-        if (errors) process.exit(1)
-        process.stdin.end();
+        if (!argv.live) {
+            db.close();
+            if (errors) process.exit(1)
+            process.stdin.end();
+        }
     });
     process.stdin.pipe(rep).pipe(process.stdout);
 }

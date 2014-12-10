@@ -2,6 +2,7 @@ var blob = require('content-addressable-blob-store');
 var wrap = require('level-option-wrap');
 var fwdb = require('fwdb');
 var exchange = require('hash-exchange');
+var decode = require('bytewise').decode;
 
 var defined = require('defined');
 var has = require('has');
@@ -28,6 +29,7 @@ function ForkDB (db, opts) {
     if (!(this instanceof ForkDB)) return new ForkDB(db, opts);
     if (!opts) opts = {};
     
+    this._db = db;
     this._fwdb = fwdb(db);
     this.db = this._fwdb.db;
     this.store = defined(
@@ -130,12 +132,12 @@ ForkDB.prototype._addSeen = function (id, aseq, cb) {
     });
 };
 
-ForkDB.prototype.replicate = function (meta, opts, cb) {
+ForkDB.prototype.replicate = function (opts, cb) {
     var self = this;
     var input = through(), output = through();
     var dup = duplexer(input, output);
     self._queue.push(function (fn) {
-        var r = self._replicate(meta, opts, cb);
+        var r = self._replicate(opts, cb);
         r.on('available', dup.emit.bind(dup, 'available'));
         r.on('response', dup.emit.bind(dup, 'response'));
         r.on('since', dup.emit.bind(dup, 'since'));
@@ -259,10 +261,25 @@ ForkDB.prototype._replicate = function (opts, cb) {
         });
         stream.pipe(df)
     });
+    
+    if (opts.live) {
+        self._db.on('batch', function (rows) {
+            var hashes = [];
+            rows.forEach(function (row) {
+                try { var key = decode(decode(row.key)[1]) }
+                catch (err) { return }
+                if (key[0] === 'hash') {
+                    hashes.push(key[1]);
+                }
+            });
+            if (hashes.length) ex.provide(hashes);
+        });
+    }
     return ex;
     
     function done () {
         if (cb) cb(errors.length ? errors : null, exchanged);
+        ex.emit('sync', exchanged);
     }
 };
 
@@ -335,6 +352,7 @@ ForkDB.prototype._createWriteStream = function (meta, opts, cb) {
             if (err) return w.emit('error', err);
             if (cb) cb(null, w.key);
             w.emit('complete', w.key);
+            self.emit('create', w.key);
         });
     }
 };
