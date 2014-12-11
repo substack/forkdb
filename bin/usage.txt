@@ -49,12 +49,16 @@ forkdb future
 
   Print an ascii diagram to stdout tracing HASH forward in time to its heads.
 
-forkdb sync # multi-master replication
-forkdb push # push updates
-forkdb pull # pull updates
+forkdb sync {OPTIONS} # multi-master replication
+forkdb push {OPTIONS} # push updates
+forkdb pull {OPTIONS} # pull updates
 
   Replicate with another forkdb using a replication strategy.
   stdin and stdout are used for incoming and outgoing traffic.
+  Optionally:
+  
+    --live  Keep the connection open for additional updates after the initial
+            replication phase.
 
 forkdb help
 

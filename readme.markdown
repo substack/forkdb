@@ -351,6 +351,9 @@ other, nothing will happen.
 forkdb saves the last sequence successfully replicated for each remote host to
 avoid sending hashes for sequences that remote hosts already know about.
 
+Set `opts.live` to `true` to keep the stream open for continuous streaming
+replication as new documents are created.
+
 # usage
 
 ```
@@ -405,12 +408,16 @@ forkdb future
 
   Print an ascii diagram to stdout tracing HASH forward in time to its heads.
 
-forkdb sync # multi-master replication
-forkdb push # push updates
-forkdb pull # pull updates
+forkdb sync {OPTIONS} # multi-master replication
+forkdb push {OPTIONS} # push updates
+forkdb pull {OPTIONS} # pull updates
 
   Replicate with another forkdb using a replication strategy.
   stdin and stdout are used for incoming and outgoing traffic.
+  Optionally:
+  
+    --live  Keep the connection open for additional updates after the initial
+            replication phase.
 
 forkdb help
 
