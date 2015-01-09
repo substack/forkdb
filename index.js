@@ -121,7 +121,7 @@ ForkDB.prototype._getSeen = function (id, cb) {
 ForkDB.prototype._addSeen = function (id, aseq, cb) {
     var self = this;
     self._getSeen(id, function (err, seq) {
-        if (err) return fn(null, rows);
+        if (err) return cb(err);
         var mseq = Math.max(seq, aseq) || 0;
         self._seen[id] = mseq;
         cb(null, {
