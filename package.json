@@ -11,7 +11,7 @@
     "content-addressable-blob-store": "^4.0.4",
     "defined": "~0.0.0",
     "duplexer2": "~0.0.2",
-    "fwdb": "^1.2.0",
+    "fwdb": "^2.0.0",
     "has": "~0.0.1",
     "hash-exchange": "^4.0.0",
     "inherits": "^2.0.1",
