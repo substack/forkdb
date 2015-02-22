@@ -6,6 +6,10 @@
   "bin": {
     "forkdb": "bin/cmd.js"
   },
+  "browser": {
+    "content-addressable-blob-store": "idb-content-addressable-blob-store",
+    "bytewise": "bytewise/hex"
+  },
   "dependencies": {
     "bytewise": "^0.7.1",
     "content-addressable-blob-store": "^4.0.4",
@@ -14,6 +18,7 @@
     "fwdb": "^2.0.0",
     "has": "~0.0.1",
     "hash-exchange": "^4.0.0",
+    "idb-content-addressable-blob-store": "^1.0.0",
     "inherits": "^2.0.1",
     "isarray": "~0.0.1",
     "json-stable-stringify": "^1.0.0",
