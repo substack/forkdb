@@ -379,6 +379,10 @@ forkdb list {--lt=LT, --gt=GT, --limit=LIMIT}
   List all the document metadata in the database.
   Optionally set LT, GT, and LIMIT constraints on the output.
 
+forkdb keys {--lt=LT, --gt=GT, --limit=LIMIT}
+
+  List all the active keys in the database, one key per line.
+
 forkdb read HASH
 
   Print the contents for HASH to stdout.

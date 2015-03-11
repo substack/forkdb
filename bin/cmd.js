@@ -36,6 +36,11 @@ if (cmd === 'list') {
     s.pipe(process.stdout);
     s.on('end', function () { db.close() });
 }
+else if (cmd === 'keys') {
+    var s = fdb.keys(argv).pipe(keys());
+    s.pipe(process.stdout);
+    s.on('end', function () { db.close() });
+}
 else if (cmd === 'create') {
     var meta = {};
     if (argv.key) {
@@ -141,6 +146,13 @@ function ndjson () {
 function hashes () {
     return through.obj(function (row, enc, next) {
         this.push(row.hash + '\n');
+        next();
+    });
+}
+
+function keys () {
+    return through.obj(function (row, enc, next) {
+        this.push(row.key + '\n');
         next();
     });
 }
