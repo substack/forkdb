@@ -239,7 +239,8 @@ Create a new forkdb instance `fdb` from a levelup or leveldown `db`.
 Optionally set:
 
 * `opts.id` - uniquely identify the current instance. This id is used to
-negotiate sequences for replication and MUST be unique.
+  negotiate sequences for replication and MUST be unique to correctly identify
+  this database.
 * `opts.dir` - directory to use for blob storage, default: './forkdb.blob'
 * `opts.store` - content-addressable [abstract-blob-store](https://npmjs.org/package/abstract-blob-store) to use instead of
 [content-addressable-blob-store](https://npmjs.org/package/content-addressable-blob-store)
