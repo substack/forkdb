@@ -24,7 +24,7 @@ if (blobdir === undefined) blobdir = path.join(argv.dir, 'blob');
 mkdirp.sync(dbdir);
 mkdirp.sync(blobdir);
 
-var db = require('level-party')(dbdir);
+var db = require('level')(dbdir);
 var fdb = require('../')(db, { dir: blobdir });
 var showHistory = require('./lib/show_history.js');
 var showFuture = require('./lib/show_future.js');
