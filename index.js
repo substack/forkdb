@@ -503,7 +503,46 @@ ForkDB.prototype.future = function (hash) {
 };
 
 ForkDB.prototype.concestor = function (hashes, cb) {
-    cb(null, hashes[0]);
+    var self = this;
+    var seen = {};
+    var seenh = {};
+    var hs = hashes.map(function (h) { return [h] });
+    hashes.forEach(function (h, ix) {
+        seenh[ix] = {};
+    });
+    
+    (function next (hashes) {
+        var results = null;
+        for (var i = 0; i < hashes.length; i++) {
+            var hs = hashes[i];
+            for (var j = 0; j < hs.length; j++) {
+                var hash = hs[j];
+                if (!has(seenh[i], hash)) {
+                    seenh[i][hash] = true;
+                    seen[hash] = (seen[hash] || 0) + 1;
+                }
+                if (seen[hash] === hashes.length) {
+                    if (!results) results = [];
+                    results.push(hash);
+                }
+            }
+        }
+        if (results && results.length) return cb(null, results);
+        
+        var pending = 0;
+        var prev = [];
+        
+        hashes.forEach(function (hs, ix) {
+            pending += hs.length;
+            hs.forEach(function (hash) {
+                self.get(hash, function (err, value) {
+                    prev[ix] = value && value.prev || [];
+                    if (-- pending === 0) next(prev);
+                });
+            });
+        });
+        if (pending === 0) return cb(null, []);
+    })(hs);
 };
 
 function getPrev (meta) {

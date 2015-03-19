@@ -58,7 +58,7 @@ test('populate concestor', function (t) {
 
 test('concestor', function (t) {
     t.plan(1);
-    fdb.concestor([ hashes[3], hashes[2] ], function (err, chash) {
-        t.equal(chash, hashes[0], 'concestor 0')
+    fdb.concestor([ hashes[3], hashes[2] ], function (err, cons) {
+        t.deepEqual(cons, [ { key: 'blorp', hash: hashes[0] } ], 'concestor 0')
     });
 });
