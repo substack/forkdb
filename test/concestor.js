@@ -60,5 +60,5 @@ test('concestor', function (t) {
     t.plan(1);
     fdb.concestor([ hashes[3], hashes[2] ], function (err, chash) {
         t.equal(chash, hashes[0], 'concestor 0')
-    }));
+    });
 });

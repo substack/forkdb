@@ -502,6 +502,10 @@ ForkDB.prototype.future = function (hash) {
     return r;
 };
 
+ForkDB.prototype.concestor = function (hashes, cb) {
+    cb(null, hashes[0]);
+};
+
 function getPrev (meta) {
     if (!meta) return [];
     if (!has(meta, 'prev')) return [];
