@@ -205,15 +205,18 @@ ForkDB.prototype._replicate = function (opts, cb) {
             gt: [ 'seq', defined(seq, null) ],
             lt: [ 'seq', undefined ]
         });
+        var provided = 0;
         r.pipe(through.obj(write, flush));
         function write (row, enc, next) {
             hashes.push(row.value);
+            provided ++;
             if (hashes.length >= 25) flush();
             next();
         }
         function flush () {
             if (hashes.length) ex.provide(hashes);
             hashes = [];
+            if (provided === 0) done();
         }
     }
     
