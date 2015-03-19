@@ -201,7 +201,7 @@ ForkDB.prototype._replicate = function (opts, cb) {
     function provideSeq (seq) {
         var hashes = [];
         var r = self.db.createReadStream({
-            gt: [ 'seq', defined(seq + 1, null) ],
+            gt: [ 'seq', defined(seq, null) ],
             lt: [ 'seq', undefined ]
         });
         r.pipe(through.obj(write, flush));
