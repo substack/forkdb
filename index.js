@@ -32,6 +32,7 @@ function ForkDB (db, opts) {
     this._db = db;
     this._fwdb = fwdb(db);
     this.db = this._fwdb.db;
+    
     this.store = defined(
         opts.store,
         blob({ dir: defined(opts.dir, './forkdb.blob') })
