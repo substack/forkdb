@@ -355,6 +355,16 @@ avoid sending hashes for sequences that remote hosts already know about.
 Set `opts.live` to `true` to keep the stream open for continuous streaming
 replication as new documents are created.
 
+## fdb.concestor(hashes, cb)
+
+Compute the
+[concestor](https://en.wikipedia.org/wiki/Most_recent_common_ancestor)
+for `hashes`, an array of strings.
+
+`cb(err, cons)` fires with `cons`, an array of concestors or an empty array if
+there is no common ancestor. If there is a tie for recency, `cons` will contain
+more than one ancestor.
+
 # usage
 
 ```
