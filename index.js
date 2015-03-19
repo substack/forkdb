@@ -534,9 +534,13 @@ ForkDB.prototype.concestor = function (hashes, cb) {
         
         hashes.forEach(function (hs, ix) {
             pending += hs.length;
+            prev[ix] = [];
             hs.forEach(function (hash) {
                 self.get(hash, function (err, value) {
-                    prev[ix] = value && value.prev || [];
+                    prev[ix].push.apply(prev[ix], value && value.prev
+                        ? value.prev.map(hashOf)
+                        : []
+                    );
                     if (-- pending === 0) next(prev);
                 });
             });
