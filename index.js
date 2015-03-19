@@ -8,6 +8,7 @@ var defined = require('defined');
 var has = require('has');
 var isarray = require('isarray');
 var stringify = require('json-stable-stringify');
+var uniq = require('uniq');
 
 var through = require('through2');
 var Readable = require('readable-stream').Readable;
@@ -527,7 +528,7 @@ ForkDB.prototype.concestor = function (hashes, cb) {
                 }
             }
         }
-        if (results && results.length) return cb(null, results);
+        if (results && results.length) return cb(null, uniq(results));
         
         var pending = 0;
         var prev = [];

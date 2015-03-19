@@ -29,6 +29,7 @@
     "readable-stream": "^1.1.13",
     "subarg": "^1.0.0",
     "through2": "^1.1.1",
+    "uniq": "^1.0.1",
     "write-only-stream": "^1.1.0"
   },
   "devDependencies": {
