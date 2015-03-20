@@ -423,6 +423,10 @@ forkdb future
 
   Print an ascii diagram to stdout tracing HASH forward in time to its heads.
 
+forkdb concestor HASH1 HASH2...
+
+  Print the most recent common ancestor(s) for the list of HASHes.
+
 forkdb sync {OPTIONS} # multi-master replication
 forkdb push {OPTIONS} # push updates
 forkdb pull {OPTIONS} # pull updates

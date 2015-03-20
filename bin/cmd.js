@@ -120,6 +120,12 @@ else if (cmd === 'sync' || cmd === 'pull' || cmd === 'push') {
     });
     process.stdin.pipe(rep).pipe(process.stdout);
 }
+else if (cmd === 'concestor') {
+    fdb.concestor(argv._.slice(1), function (err, cons) {
+        if (err) error(err);
+        else console.log(cons.join('\n'));
+    });
+}
 else showHelp(1);
 
 function showHelp (code) {
