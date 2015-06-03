@@ -32,7 +32,7 @@ forkdb get HASH
 
   Print the metadata for HASH to stdout as json.
 
-forkdb heads KEY
+forkdb forks KEY
 
   Print the hash of every head for KEY on its own line.
 

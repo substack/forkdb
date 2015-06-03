@@ -29,7 +29,7 @@ $ echo beep boop | forkdb create blorp
 This document is now the singular head of the blorp key:
 
 ```
-$ forkdb heads blorp
+$ forkdb forks blorp
 9c0564511643d3bc841d769e27b1f4e669a75695f2a2f6206bca967f298390a0
 ```
 
@@ -43,7 +43,7 @@ f5ff29843ef0658e2a1e14ed31198807ce8302936116545928756844be45fe41
 ```
 
 ```
-$ forkdb heads blorp
+$ forkdb forks blorp
 f5ff29843ef0658e2a1e14ed31198807ce8302936116545928756844be45fe41
 ```
 
@@ -57,11 +57,11 @@ $ echo BeEp BoOp | forkdb create blorp \
 6c0c881fad7adb3fec52b75ab0de8670391ceb8847c8e4c3a2dce9a56244b328
 ```
 
-This is no problem for forkdb. There are just 2 heads of the `blorp` key now,
+This is no problem for forkdb. There are just 2 forks of the `blorp` key now,
 which is completely fine:
 
 ```
-$ forkdb heads blorp
+$ forkdb forks blorp
 6c0c881fad7adb3fec52b75ab0de8670391ceb8847c8e4c3a2dce9a56244b328
 f5ff29843ef0658e2a1e14ed31198807ce8302936116545928756844be45fe41
 ```
@@ -70,7 +70,7 @@ A UI could show both (or more!) versions side by side or perhaps have a
 branch where the files diverge.
 
 However, we can also merge these 2 documents back into 1 by creating a new
-document that points back and both heads:
+document that points back at both forks:
 
 ```
 $ echo BEEPITY BOOPITY | forkdb create blorp \
@@ -82,7 +82,7 @@ $ echo BEEPITY BOOPITY | forkdb create blorp \
 and now we're back to a single head:
 
 ```
-$ forkdb heads blorp
+$ forkdb forks blorp
 058647fc544f70a96d5d083ae7e3c373b441fc3d55b993407254fcce3c732f1e
 ```
 
@@ -139,10 +139,10 @@ $ dupsh 'forkdb sync -d /tmp/b' 'nc localhost 5000'
 No matter how you get the data to each database, everything is now in sync!
 
 ```
-$ forkdb -d /tmp/a heads msg
+$ forkdb -d /tmp/a forks msg
 071f8d4403f88ca431023ec12a277b28bcd68ab41c5043a5bf7e690b23ba7184
 e708cc6e5114ac184e0cf81aca203ddd6b02a599d9d85ac756b37b9b19cd4fae
-$ forkdb -d /tmp/b heads msg
+$ forkdb -d /tmp/b forks msg
 071f8d4403f88ca431023ec12a277b28bcd68ab41c5043a5bf7e690b23ba7184
 e708cc6e5114ac184e0cf81aca203ddd6b02a599d9d85ac756b37b9b19cd4fae
 ```
@@ -165,9 +165,9 @@ $ dupsh 'forkdb sync -d /tmp/a' 'forkdb sync -d /tmp/b'
 now the data is merged on both databases:
 
 ```
-$ forkdb -d /tmp/a heads msg
+$ forkdb -d /tmp/a forks msg
 7e38e3a49db243c39b86e8b17535745b8967b914b5aeaf442c8fac9f3e6a7b8b
-$ forkdb -d /tmp/b heads msg
+$ forkdb -d /tmp/b forks msg
 7e38e3a49db243c39b86e8b17535745b8967b914b5aeaf442c8fac9f3e6a7b8b
 ```
 
@@ -273,7 +273,7 @@ function should call `fn(err, rows)` with the rows to insert.
 
 Return a readable stream `r` with the blob content at `hash`.
 
-## var r = fdb.heads(key)
+## var r = fdb.forks(key)
 
 Return a readable object stream `r` that outputs an object with `key` and `hash`
 properties for every head of `key`.
@@ -402,7 +402,7 @@ forkdb get HASH
 
   Print the metadata for HASH to stdout as json.
 
-forkdb heads KEY
+forkdb forks KEY
 
   Print the hash of every head for KEY on its own line.
 

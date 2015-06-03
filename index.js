@@ -362,9 +362,10 @@ ForkDB.prototype._createWriteStream = function (meta, opts, cb) {
     }
 };
 
-ForkDB.prototype.heads = function (key, opts, cb) {
+ForkDB.prototype.forks = function (key, opts, cb) {
     return this._fwdb.heads(key, opts, cb);
 };
+ForkDB.prototype.heads = ForkDB.prototype.forks;
 
 ForkDB.prototype.keys = function (opts, cb) {
     return this._fwdb.keys(opts, cb);

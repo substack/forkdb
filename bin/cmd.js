@@ -82,7 +82,7 @@ else if (cmd === 'get') {
         db.close();
     });
 }
-else if (cmd === 'heads') {
+else if (cmd === 'heads' || cmd === 'forks') {
     var s = fdb.heads(argv._[1]).pipe(hashes());
     s.pipe(process.stdout);
     s.on('end', function () { db.close() });
